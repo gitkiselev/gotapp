@@ -48,7 +48,8 @@ export default class GotService {
 				gender: char.gender,
 				born: char.born,
 				died: char.died,
-				culture: char.culture
+				culture: char.culture,
+				url: char.url.match(/\d+$/)
 		}
 	}
 	_transformHouse(house){
@@ -67,31 +68,30 @@ export default class GotService {
 				numberOfPages: book.numberOfPages,
 				publisher: book.publisher,
 				released: book.released
-				
 		}
 	}
 }
-const got = new GotService();
+/*const got = new GotService();
 got.getAllCharacters()
 .then(res => {
-	console.log(res.forEach(item => console.log(item.name)));
+	//console.log(res.forEach(item => console.log(item.name)));
 });
 got.getCharacter(130)
 .then(res => console.log(res));
 
 got.getAllHouses()
 .then(res => {
-	console.log(res.forEach(item => console.log(item.name)));
+	//console.log(res.forEach(item => console.log(item.name)));
 });
 got.getHouse(10)
 .then(res => console.log(res));
 
 got.getAllBooks()
 .then(res => {
-	console.log(res.forEach(item => console.log(item.name)));
+	//console.log(res.forEach(item => console.log(item.name)));
 });
 got.getBook(10)
-.then(res => console.log(res));
+.then(res => console.log(res));*/
 
 
 

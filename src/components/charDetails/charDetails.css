@@ -12,5 +12,7 @@
 .select-error {
     color: #fff;
     text-align: center;
-    font-size: 26px;
+				font-size: 26px;
+				
+				padding: 25px 25px 15px 25px;
 }
