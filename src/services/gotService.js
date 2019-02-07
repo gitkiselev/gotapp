@@ -49,7 +49,7 @@ export default class GotService {
 				born: char.born,
 				died: char.died,
 				culture: char.culture,
-				url: char.url.match(/\d+$/)
+				id: char.url.match(/\d+$/)
 		}
 	}
 	_transformHouse(house){
