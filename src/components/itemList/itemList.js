@@ -13,37 +13,68 @@ const ListItem = styled.li`
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.125);
 `;
+const ListBlock = styled.div`
+  img {
+    width: 100%;
+  }
+  background-color: #fff;
+  padding: 25px 25px 15px 25px;
+  margin-bottom: 40px;
+  h4 {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+`;
 export default class ItemList extends Component {
   gotService = new gotService();
   state = {
     charList: null,
-				error: false,
-				loading: true
+    error: false,
+    loading: true
   };
   componentDidMount() {
-    this.gotService.getAllCharacters().then(charList => {
-      this.setState({ charList });
-    }); //.this.foo.bar = 0;
+    this.gotService
+      .getAllCharacters()
+      .then(this.onCharLoaded)
+      .catch(this.onError);
+    //this.foo.bar = 0;
   }
+  onCharLoaded = charList => {
+    this.setState({
+      charList,
+      loading: false
+    });
+  };
+  onError = err => {
+    this.setState({
+      error: true,
+      loading: false
+    });
+  };
   renderItems(arr) {
-    return arr.map((item, id) => {
-      console.log(item.id);
+    return arr.map(item => {
+      const { id, name } = item;
       return (
         <ListItem key={id} onClick={() => this.props.onCharSelected(id)}>
-          {item.name} <span>ID {item.id}</span>
+          {name} <span>ID {id}</span>
         </ListItem>
       );
     });
   }
   render() {
-    const { charList } = this.state;
-    if (this.state.error) {
-      return <ErrorMessage />;
-    }
-    if (!charList) {
-      return <Spinner />;
-    }
-    const items = this.renderItems(charList);
-    return <ul className="item-list list-group">{items}</ul>;
+    const { charList, loading, error } = this.state;
+    const errorMessage = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !(loading || error) ? this.renderItems(charList) : null;
+
+    return (
+      <ListBlock>
+        <ul className="item-list list-group">
+          {errorMessage}
+          {spinner}
+          {content}
+        </ul>
+      </ListBlock>
+    );
   }
 }

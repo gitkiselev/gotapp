@@ -6,7 +6,7 @@ export default class GotService {
 	async getResource(url){
 		const res = await fetch(`${this._apiBase}${url}`);
 		if(!res.ok){
-			throw new Error(`Could not fetch ${url}` + `, recieved ${res.status}`);
+			throw new Error(`Could not fetch ${url}, recieved ${res.status}`);
 		}
 			return await res.json();
 	}
@@ -49,7 +49,7 @@ export default class GotService {
 				born: char.born,
 				died: char.died,
 				culture: char.culture,
-				id: char.url.match(/\d+$/)
+				id: char.url.match(/\d+$/).join()
 		}
 	}
 	_transformHouse(house){

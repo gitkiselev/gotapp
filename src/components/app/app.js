@@ -25,7 +25,7 @@ class App extends Component {
   render() {
     const toggleBlock = this.state.visible ? <RandomChar /> : null;
     if (this.state.error) {
-      return <ErrorMessage />;
+      return <ErrorMessage/>;
     }
     return (
       <>

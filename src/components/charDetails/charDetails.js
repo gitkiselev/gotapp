@@ -3,6 +3,7 @@ import "./charDetails.css";
 import gotService from "../../services/gotService";
 import styled from "styled-components";
 import ErrorMessage from "../errorMessage";
+import Spinner from "../spinner";
 const CharBlock = styled.div`
   background-color: #fff;
   padding: 25px 25px 15px 25px;
@@ -23,27 +24,56 @@ export default class CharDetails extends Component {
     if (this.props.charId !== prevProps.charId) {
       this.updateChar();
     }
-  }
+		}
+		onCharLoaded = char => {
+			this.setState({
+					char,
+					loading: false
+			});
+	};
+	onError = (err) => {
+			this.setState({
+					error: true,
+					loading: false
+			});
+	};
   updateChar() {
     const { charId } = this.props;
     if (!charId) {
       return;
     }
-    this.gotService.getCharacter(charId).then(char => {
-      this.setState({ char });
-    })//this.foo.bar = 0;
+    this.gotService
+      .getCharacter(charId)
+      .then(this.onCharLoaded)
+      .catch(this.onError);
   }
-  render() {
-    if (!this.state.char) {
-      return <span className="select-error">Please select a character</span>;
-    }
+  
+		render() {
+			
+			const { char, loading, error } = this.state;
+			const errorMessage = error ? <ErrorMessage /> : null;
+			const spinner = loading ? <Spinner /> : null;
+			const content = !(loading || error) ? <View char={char} /> : null;
 
-    const { name, gender, born, died, culture } = this.state.char;
-    if (this.state.error) {
-      return <ErrorMessage />;
-    }
-    return (
-      <CharBlock className="rounded">
+			return (
+					<CharBlock>
+							{errorMessage}
+							{spinner}
+							{content}
+					</CharBlock>
+			);
+	}
+}
+
+
+
+
+const View = ({ char }) => {
+	const { name, gender, born, died, culture} = char;
+	return (
+		
+			<>
+					
         <h4>{name}</h4>
         <ul className="list-group list-group-flush">
           <li className="list-group-item d-flex justify-content-between">
@@ -63,7 +93,7 @@ export default class CharDetails extends Component {
             <span>{culture}</span>
           </li>
         </ul>
-      </CharBlock>
-    );
-  }
-}
+      
+			</>
+	);
+};
