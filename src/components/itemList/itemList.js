@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "./itemList.css";
 import styled from "styled-components";
-import gotService from "../../services/gotService";
 import Spinner from "../spinner";
 import ErrorMessage from "../errorMessage";
 const ListItem = styled.li`
@@ -26,24 +25,32 @@ const ListBlock = styled.div`
   }
 `;
 export default class ItemList extends Component {
-  gotService = new gotService();
+  
   state = {
-    charList: null,
+    itemList: null,
     error: false,
     loading: true
   };
   componentDidMount() {
-    this.gotService
-      .getAllCharacters()
-      .then(this.onCharLoaded)
-      .catch(this.onError);
+			const {getData} = this.props;
+    getData()
+					.then((itemList) => {
+							this.setState({
+								itemList,
+								loading: false
+							})
+					})
+		}
+      
+      
     //this.foo.bar = 0;
-  }
-  onCharLoaded = charList => {
+					
+  onItemLoaded = itemList => {
     this.setState({
-      charList,
+      itemList,
       loading: false
-    });
+    }).then(this.onItemLoaded)
+				.catch(this.onError);
   };
   onError = err => {
     this.setState({
@@ -53,19 +60,20 @@ export default class ItemList extends Component {
   };
   renderItems(arr) {
     return arr.map(item => {
-      const { id, name } = item;
+						const {id} = item;
+						const label = this.props.renderItem(item);
       return (
-        <ListItem key={id} onClick={() => this.props.onCharSelected(id)}>
-          {name} <span>ID {id}</span>
+        <ListItem key={id} onClick={() => this.props.onItemSelected(id)}>
+          {label} <span>ID {id}</span>
         </ListItem>
       );
     });
   }
   render() {
-    const { charList, loading, error } = this.state;
+    const { itemList, loading, error } = this.state;
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading ? <Spinner /> : null;
-    const content = !(loading || error) ? this.renderItems(charList) : null;
+    const content = !(loading || error) ? this.renderItems(itemList) : null;
 
     return (
       <ListBlock>

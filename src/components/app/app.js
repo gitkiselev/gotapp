@@ -3,16 +3,24 @@ import { Col, Row, Container } from "reactstrap";
 import Header from "../header";
 import RandomChar from "../randomChar";
 import ErrorMessage from "../errorMessage";
-import CharacterPage from "../characterPage";
+import CharacterPage from "../pages/characterPage";
+import BooksPage from "../pages/booksPage";
+import HousesPage from "../pages/housesPage";
+import ItemList from "../itemList";
+import ItemDetails from "../itemDetails";
+import gotService from "../../services/gotService";
 
-class App extends Component {
+export default class App extends Component {
+	gotService = new gotService();
   state = {
+			onToggleV: true,
     visible: true,
     error: false
   };
   componentDidCatch() {
     console.log("error");
     this.setState({
+
       error: true
     });
   }
@@ -40,10 +48,52 @@ class App extends Component {
             </Col>
           </Row>
           <CharacterPage />
+										<Row>
+												<Col md={6}>
+														<ItemList
+															onItemSelected={this.onItemSelected}
+															getData={this.gotService.getAllCharacters}
+															
+															renderItem={(item) => item.name}/>
+													
+												</Col>
+												<Col md={6}>
+												<ItemDetails itemId ={this.state.selectedChar}
+																									onItemSelected={this.onItemSelected}/>
+												
+												</Col>
+										</Row>	
+										<Row>
+												<Col md={6}>
+														<ItemList
+															onItemSelected={this.onItemSelected}
+															getData={this.gotService.getAllBooks}
+															
+															renderItem={(item) => item.name}/>
+													
+												</Col>
+												<Col md={6}>
+												<ItemDetails itemId ={this.state.selectedItem}
+																									onItemSelected={this.onItemSelected}/>
+												
+												</Col>
+										</Row>	
+											<Row>
+													<Col md={6}>
+														<ItemList
+														onItemSelected={this.onItemSelected}
+														getData={this.gotService.getAllHouses}
+														renderItem={(item) => item.name}/>
+													</Col>
+													<Col md={6}>
+														<ItemDetails charId ={this.state.selectedItem}
+														onItemSelected={this.onItemSelected}/>
+													</Col>
+											</Row>
         </Container>
       </>
     );
   }
 }
 
-export default App;
+
