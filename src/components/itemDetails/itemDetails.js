@@ -5,7 +5,7 @@ import styled from "styled-components";
 import ErrorMessage from "../errorMessage";
 import Spinner from "../spinner";
 
-const Field = ({item, field, label}) => {
+const Field = ({item, field, label}) => {//item элемент, field поле, label подпись поля
 	return (
 		<li className="list-group-item d-flex justify-content-between">
 					<span className="term">{label}</span>
@@ -13,8 +13,8 @@ const Field = ({item, field, label}) => {
 			</li>
 	)
 }
-export {Field};
-const CharBlock = styled.div`
+export {Field}
+const ItemBlock = styled.div`
   background-color: #fff;
   padding: 25px 25px 15px 25px;
   margin-bottom: 40px;
@@ -28,6 +28,7 @@ export default class ItemDetails extends Component {
 				loading: false
   };
   componentDidMount() {
+			console.log('did mount');
     this.updateItem();
   }
   componentDidUpdate(prevProps) {
@@ -36,6 +37,7 @@ export default class ItemDetails extends Component {
     }
 		}
 		onItemLoaded = item => {
+			console.log('load');
 			this.setState({
 					item,
 					loading: false
@@ -47,30 +49,51 @@ export default class ItemDetails extends Component {
 					loading: false
 			});
 	};
-  updateItem() {
-    const { itemId } = this.props;
+	updateItem() {
+		console.log('update');
+		const { itemId, getDetails } = this.props;
+		console.log(itemId);
     if (!itemId) {
+					console.log(itemId);
       return;
-    }
-    this.gotService
-      .getItem(itemId)
+				}
+				console.log(itemId);
+    getDetails(itemId)
       .then(this.onItemLoaded)
       .catch(this.onError);
   }
   
 		render() {
-			
+			console.log('render');
+			if (!this.state.item) {
+				return <span className="select-error">Please select a character</span>
+				
+		}
+		console.log(this.state);
 			const { item, loading, error } = this.state;
+			const {name} = item;
+			const view = (
+				<>
+						<h4>{(item !== null) ? name : ''}</h4>
+						<ul>
+								{
+										React.Children.map(this.props.children, (child) => {
+												return React.cloneElement(child, {item});//{item} приходит со стейта
+										})
+								}
+						</ul>
+				</>
+		)
 			const errorMessage = error ? <ErrorMessage /> : null;
 			const spinner = loading ? <Spinner /> : null;
-			const content = !(loading || error) ? <View item={item} /> : null;
+			const content = !(loading || error) ? view : null;
 
 			return (
-					<CharBlock>
+					<ItemBlock>
 							{errorMessage}
 							{spinner}
 							{content}
-					</CharBlock>
+					</ItemBlock>
 			);
 	}
 }
@@ -78,19 +101,3 @@ export default class ItemDetails extends Component {
 
 
 
-const View = ({item}) => {
-	const {item} = this.state;
-	const {name} = item;
-	return (
-		
-			<>
-				<h4>{name}</h4>
-				<ul className="list-group list-group-flush">
-						{React.Children.map(this.props.children, (child)=>{
-								return React.cloneElement(child, {item})//переименовать char -> item
-						})
-						}
-				</ul>
-			</>
-	);
-};

@@ -8,15 +8,16 @@ import RowBlock from '../../rowBlock';
 export default class BooksPage extends Component {
 	gotService = new gotService();
   state = {
-    selectedBook: 103,
+    selectedItem: null,
     error: false
   };
   onItemSelected = id => {
-    console.log(id);
+    
     this.setState({
       selectedItem: id
     });
-  };
+		};
+		
   componentDidCatch() {
     this.setState({
       error: true
@@ -31,11 +32,12 @@ export default class BooksPage extends Component {
 			)
 
 			const booksDetails = (
-				<ItemDetails itemId={this.state.selectedItem}>
-					<Field fields='name' label='Name'/>
-					<Field fields='numbersOfPages' label='Numbers of pages'/>
-					<Field fields='publisher' label='Publisher'/>
-					<Field fields='released' label='Released'/>
+				<ItemDetails itemId={this.state.selectedItem}
+				getDetails = {this.gotService.getBook}>
+					<Field field='name' label='Name'/>
+					<Field field='numbersOfPages' label='Numbers of pages'/>
+					<Field field='publisher' label='Publisher'/>
+					<Field field='released' label='Released'/>
 				</ItemDetails>
 			)
     return (

@@ -8,7 +8,7 @@ import RowBlock from '../../rowBlock';
 export default class CharacterPage extends Component {
 	gotService = new gotService();
   state = {
-    selectedItem: 130,
+    selectedItem: null,
     error: false
   };
   onItemSelected = id => {
@@ -31,11 +31,12 @@ export default class CharacterPage extends Component {
 			)
 
 			const charDetails = (
-				<ItemDetails charId={this.state.selectedItem}>
-				<Field fields='gender' label='Gender'/>
-				<Field fields='born' label='Born'/>
-				<Field fields='died' label='Died'/>
-				<Field fields='culture' label='Culture'/>
+				<ItemDetails itemId={this.state.selectedItem}
+				getDetails = {this.gotService.getCharacter}>
+				<Field field='gender' label='Gender'/>
+				<Field field='born' label='Born'/>
+				<Field field='died' label='Died'/>
+				<Field field='culture' label='Culture'/>
 				</ItemDetails>
 			)
     return (

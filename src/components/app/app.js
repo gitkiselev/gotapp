@@ -6,8 +6,7 @@ import ErrorMessage from "../errorMessage";
 import CharacterPage from "../pages/characterPage";
 import BooksPage from "../pages/booksPage";
 import HousesPage from "../pages/housesPage";
-import ItemList from "../itemList";
-import ItemDetails from "../itemDetails";
+
 import gotService from "../../services/gotService";
 
 export default class App extends Component {
@@ -48,48 +47,9 @@ export default class App extends Component {
             </Col>
           </Row>
           <CharacterPage />
-										<Row>
-												<Col md={6}>
-														<ItemList
-															onItemSelected={this.onItemSelected}
-															getData={this.gotService.getAllCharacters}
-															
-															renderItem={(item) => item.name}/>
-													
-												</Col>
-												<Col md={6}>
-												<ItemDetails itemId ={this.state.selectedChar}
-																									onItemSelected={this.onItemSelected}/>
-												
-												</Col>
-										</Row>	
-										<Row>
-												<Col md={6}>
-														<ItemList
-															onItemSelected={this.onItemSelected}
-															getData={this.gotService.getAllBooks}
-															
-															renderItem={(item) => item.name}/>
-													
-												</Col>
-												<Col md={6}>
-												<ItemDetails itemId ={this.state.selectedItem}
-																									onItemSelected={this.onItemSelected}/>
-												
-												</Col>
-										</Row>	
-											<Row>
-													<Col md={6}>
-														<ItemList
-														onItemSelected={this.onItemSelected}
-														getData={this.gotService.getAllHouses}
-														renderItem={(item) => item.name}/>
-													</Col>
-													<Col md={6}>
-														<ItemDetails charId ={this.state.selectedItem}
-														onItemSelected={this.onItemSelected}/>
-													</Col>
-											</Row>
+										<BooksPage />
+										<HousesPage />
+											
         </Container>
       </>
     );

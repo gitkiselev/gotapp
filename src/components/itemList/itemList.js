@@ -45,7 +45,7 @@ export default class ItemList extends Component {
       
     //this.foo.bar = 0;
 					
-  onItemLoaded = itemList => {
+  updateItem = itemList => {
     this.setState({
       itemList,
       loading: false

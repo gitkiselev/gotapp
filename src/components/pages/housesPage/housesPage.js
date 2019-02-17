@@ -8,13 +8,13 @@ import RowBlock from '../../rowBlock';
 export default class HousesPage extends Component {
 	gotService = new gotService();
   state = {
-    selectedItem: 130,
+    selectedItem: null,
     error: false
   };
   onItemSelected = id => {
     console.log(id);
     this.setState({
-      selectedChar: id
+      selectedItem: id
     });
   };
   componentDidCatch() {
@@ -31,13 +31,14 @@ export default class HousesPage extends Component {
 			)
 
 			const housesDetails = (
-				<ItemDetails charId={this.state.selectedItem}>
-					<Field fields='name' label='Name'/>
-					<Field fields='region' label='Region'/>
-					<Field fields='words' label='Words'/>
-					<Field fields='titles' label='Titles'/>
-					<Field fields='overlord' label='Overlord'/>
-					<Field fields='ancestaralWeapons' label='Ancestaral Weapons'/>
+				<ItemDetails itemId={this.state.selectedItem}
+				getDetails = {this.gotService.getHouse}>
+					<Field field='name' label='Name'/>
+					<Field field='region' label='Region'/>
+					<Field field='words' label='Words'/>
+					<Field field='titles' label='Titles'/>
+					<Field field='overlord' label='Overlord'/>
+					<Field field='ancestralWeapons' label='Ancestral Weapons'/>
 				</ItemDetails>
 			)
     return (
